@@ -298,6 +298,14 @@ module AbstractController
         assert_generates("/image", :controller=> :image)
       end
 
+      def test_including_into_singleton_class
+        object = Object.new
+        routes = ActionDispatch::Routing::RouteSet.new
+
+        object.singleton_class.instance_eval { include routes.url_helpers }
+        assert_empty object.default_url_options
+      end
+
       def test_named_routes_with_nil_keys
         with_routing do |set|
           set.draw do
